@@ -1,62 +1,54 @@
-from typing import Tuple, List, Union
+from typing import List, Union
 
 
 def convert_back(curr, start, gph, total) -> List[Union[float, int]]:
+
+    """This is used to check that each trade appended to path is profitable."""
+
     ttl = total
     fx = 0
-    for tupe in gph[curr]:
-        if tupe[1] == start:
-            fx = tupe[2]
+    for tup in gph[curr]:
+        if tup[1] == start:
+            fx = tup[2]
             ttl = ttl * fx
     return [ttl, curr, start, fx]
 
 
-'''
-Brute force arbitrage computation -- cycles between vertices are permitted as parallel edges have different weights.
-todo: refactor into better data structure.
-'''
+def find_max(g, start_amount, vertex, dep) -> List[List[Union[int, float]]]:
 
+    """
+    Brute force arbitrage computation -- cycles between vertices are permitted as parallel edges have different weights.
+    todo: refactor into better data structure.
+    """
 
-def find_max(g, start_amount, vertex, dep) -> Tuple[float, List[List[Union[int, float]]]]:
     total = start_amount
     start_node = vertex
     path = []
 
-    for depth in range(dep):
+    for depth in range(dep):  # user specifies number of trades to make during this step (i.e. depth of search)
         best_trades_at_depth = []
 
         for tup in g[start_node]:
-
             current_comparison_node = tup[1]
             current_node = start_node
             fx = tup[2]
-            # print(f'{total} {current_node} orbs to {current_comparison_node} orbs is {total * fx}')
             potential_total = total * fx
-            potential_trade = convert_back(current_comparison_node, current_node, g, potential_total)
-
+            potential_trade = convert_back(current_comparison_node,
+                                           current_node, g, potential_total)  # ensure every trade is profitable
             if potential_trade[0] > total:
                 profit = potential_trade[0] - total
                 for tp in g[current_node]:
-                    if tp[1] == 4:
+                    if tp[1] == 4:  # use chaos orb (id == 4) as base value. Want to judge chaos profit per trade
                         profit *= tp[2]
-                # print(f'PROFIT IN CHAOS ORBS: {profit:.2f}')
-                # print(f'verified trade: {total:.2f} {current_node} orbs to {current_comparison_node} orbs is {total * fx:.2f}')
                 verified_trade = [profit, total * fx, current_comparison_node, current_node]
-                # print('potential', verified_trade)
                 best_trades_at_depth.append(verified_trade)
 
-        best_trades_at_depth.sort(reverse=True)
+        best_trades_at_depth.sort(reverse=True)  # sort by converted-to-chaos profit per trade
         if best_trades_at_depth:
-            # print('hit', best_trades_at_depth)
             start_node = best_trades_at_depth[0][2]
             pre_total = total
             total = best_trades_at_depth[0][1]
             path.append([pre_total, best_trades_at_depth[0][3], best_trades_at_depth[0][2], total])
-            # print(f'start is now node {start_node}, total is now {total:.2f}')
-    # print()
-    # print(f'path is {path}')
-    # print(total)
-    # print(f'profit is {(total - start_amount):.2f} orbs')
     return path
 
 

@@ -6,7 +6,7 @@ from utils import arbitrage
 
 orbs_to_scrape = []
 
-default_scrape = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 16]  # TODO: Store this locally and allow users to set
+# default_scrape = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 13, 15, 16]  # TODO: Store this locally and allow users to set
 
 
 def menu():
@@ -76,6 +76,7 @@ def compute_arbitrage(pg, orbs_list):
     for trade in arb:
         print()
         print(f'Trade {trade[0]:.2f} {pg.get(trade[1])}s for {trade[3]:.2f} {pg.get(trade[2])}s')
+
 
 def set_orbs_to_scrape(page_data):
     global orbs_to_scrape
