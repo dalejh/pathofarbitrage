@@ -9,7 +9,7 @@ class AvailableOrbParser:
         self.parent = parent
 
     def __repr__(self):
-        return f'{self.name} : {self.id}'
+        return f'AvailableOrbParser {self.name} : {self.id}'
 
     @property
     def name(self) -> str:
@@ -18,8 +18,4 @@ class AvailableOrbParser:
     @property
     def id(self) -> str:
         return self.parent.attrs[AllOrbData.ORB_ID]
-
-    @property
-    def make_dict(self) -> {str, str}:
-        return {self.name: self.id}
 

@@ -1,6 +1,6 @@
 class TransactionDetails:
-    WANT_CURRENCY = 'data-sellcurrency'
+    WANT_ID = 'data-sellcurrency'
     WANT_AMOUNT = 'data-sellvalue'
-    HAVE_CURRENCY = 'data-buycurrency'
+    HAVE_ID = 'data-buycurrency'
     HAVE_AMOUNT = 'data-buyvalue'
     USERNAME = 'data-username'
